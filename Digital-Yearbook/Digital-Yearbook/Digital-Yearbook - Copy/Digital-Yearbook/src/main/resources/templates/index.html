@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UEP Digital Yearbook</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header class="university-header">
+    <div class="logo-container">
+        <img th:src="@{/uploads/ueplogo.png}" alt="UEP Logo">
+        <div class="header-text">
+            University of Eastern Philippines
+            <span>Digital Yearbook System</span>
+        </div>
+    </div>
+</header>
+
+<!-- Sidebar Toggle Button -->
+<button class="menu-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</button>
+
+<!-- Right-aligned Sidebar Navigation -->
+<aside class="sidebar">
+    <ul class="sidebar-menu">
+        <li>
+            <a href="#" class="menu-item" onclick="showPage('visionPage'); toggleSidebar();">
+                <i class="fas fa-eye"></i> Vision
+            </a>
+        </li>
+        <li>
+            <a href="#" class="menu-item" onclick="showPage('missionPage'); toggleSidebar();">
+                <i class="fas fa-bullseye"></i> Mission
+            </a>
+        </li>
+        <li>
+            <a href="#" class="menu-item" onclick="showPage('coreValuesPage'); toggleSidebar();">
+                <i class="fas fa-star"></i> Core Values
+            </a>
+        </li>
+        <li>
+            <a href="#" class="menu-item" onclick="showPage('leadershipMessagePage'); toggleSidebar();">
+                <i class="fas fa-comment"></i> Leadership Message
+            </a>
+        </li>
+        <li>
+            <a href="#" class="menu-item" onclick="showPage('hymnPage'); toggleSidebar();">
+                <i class="fas fa-music"></i> UEP Hymn
+            </a>
+        </li>
+        <li id="faculty-menu-item">
+            <a href="#" class="menu-item" onclick="toggleSubmenu('faculty-submenu');">
+                <i class="fas fa-chalkboard-teacher"></i> Faculty Members
+                <i class="fas fa-chevron-down ml-auto" style="margin-left: auto;"></i>
+            </a>
+            <ul id="faculty-submenu" class="submenu">
+                <li><a href="#" onclick="showFaculty('College of Law'); toggleSidebar();">College of Law</a></li>
+                <li><a href="#" onclick="showFaculty('College of Agriculture, Fisheries, and Natural Resources'); toggleSidebar();">College of Agriculture</a></li>
+                <li><a href="#" onclick="showFaculty('College of Arts and Communication'); toggleSidebar();">College of Arts & Communication</a></li>
+                <li><a href="#" onclick="showFaculty('College of Business Administration'); toggleSidebar();">College of Business Admin</a></li>
+                <li><a href="#" onclick="showFaculty('College of Education'); toggleSidebar();">College of Education</a></li>
+                <li><a href="#" onclick="showFaculty('College of Engineering'); toggleSidebar();">College of Engineering</a></li>
+                <li><a href="#" onclick="showFaculty('College of Nursing and Allied Health Sciences'); toggleSidebar();">College of Nursing</a></li>
+                <li><a href="#" onclick="showFaculty('College of Science'); toggleSidebar();">College of Science</a></li>
+                <li><a href="#" onclick="showFaculty('College of Veterinary Medicine'); toggleSidebar();">Veterinary Medicine</a></li>
+            </ul>
+        </li>
+    </ul>
+</aside>
+
+<main class="main-content">
+
+    <!-- Login Page -->
+    <div class="page-container" id="loginPage">
+        <h2 class="welcome-header">Welcome to UEP Digital Yearbook</h2>
+        <div class="form-container">
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="emailOrPhone">Email or Phone:</label>
+                    <input type="text" id="emailOrPhone" placeholder="Enter email or phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+                <!-- CAPTCHA -->
+                <div class="form-group">
+                    <label>CAPTCHA:</label>
+                    <div class="captcha-container">
+                        <div id="captchaText" class="captcha-code">X9Y2Z</div>
+                        <button type="button" class="refresh-captcha" onclick="generateCaptcha()">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    <input type="text" id="captchaInput" placeholder="Enter CAPTCHA" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+        <div class="auth-options centered-links">
+            <span>Don't have an account?
+                <span class="switch-auth">
+                    <a href="#" onclick="showRegisterPage()" class="blue-link">Register here</a>
+                </span>
+            </span>
+            <span> | </span>
+            <span>
+                <a href="#" onclick="showForgotPassword()" class="blue-link">Forgot Password?</a>
+            </span>
+        </div>
+    </div>
+
+    <!-- Register Page -->
+    <div class="page-container hidden" id="registerPage">
+        <h2 class="welcome-header">Create New Account</h2>
+        <div class="form-container">
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="regEmail">Email:</label>
+                    <input type="email" id="regEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="regPhone">Phone Number:</label>
+                    <input type="tel" id="regPhone" pattern="[0-9]{10,15}" required placeholder="e.g. 09700679114">
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password:</label>
+                    <input type="password" id="regPassword" required placeholder="Create a password">
+                </div>
+                <!-- Registration CAPTCHA -->
+                <div class="form-group">
+                    <label>CAPTCHA Verification:</label>
+                    <div class="captcha-container">
+                        <div class="captcha-code" id="regCaptchaText">X9Y2Z</div>
+                        <button type="button" class="refresh-captcha" onclick="generateRegCaptcha()">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    <input type="text" id="regCaptchaInput" placeholder="Enter CAPTCHA code" required>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+        <div class="auth-options">
+            Already have an account?
+            <span class="switch-auth" onclick="showLoginPage()">Login here</span>
+        </div>
+    </div>
+
+    <!-- Forgot Password Page -->
+    <div class="page-container hidden" id="forgotPasswordPage">
+        <h2 class="welcome-header">Forgot Password</h2>
+        <div class="form-container" id="forgotFormContainer">
+            <!-- Step 1: Enter Email -->
+            <form id="forgotPasswordForm">
+                <div class="form-group">
+                    <label for="forgotEmail">Enter your email:</label>
+                    <input type="email" id="forgotEmail" required placeholder="your@email.com">
+                </div>
+                <button type="submit">Next</button>
+            </form>
+        </div>
+        <div class="auth-options centered-links">
+            <span>
+                <a href="#" onclick="showLoginPage()" class="blue-link">Back to Login</a>
+            </span>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div class="page-container hidden" id="dashboardPage">
+        <h1 class="welcome-header">Welcome, <span id="usernameDisplay">Graduate</span>!</h1>
+        <div class="center-content">
+            <button onclick="showPage('yearSelectionPage')">View Graduated Students</button>
+        </div>
+        <div class="back-button-container">
+            <button class="back-button" onclick="showPage('loginPage')">← Back to Login</button>
+        </div>
+    </div>
+
+    <!-- Year Selection Page -->
+    <div class="page-container hidden" id="yearSelectionPage">
+        <h1 class="welcome-header">Graduation Years (2005-2024)</h1>
+        <div class="year-grid" id="yearGrid"></div>
+        <div class="back-button-container">
+            <button class="back-button" onclick="showPage('dashboardPage')">← Back to Dashboard</button>
+        </div>
+    </div>
+
+    <!-- College Page -->
+    <div class="page-container hidden" id="collegePage">
+        <h1 class="welcome-header">Colleges - Class of <span id="collegeYear">2024</span></h1>
+        <div class="college-grid" id="collegeGrid"></div>
+        <div class="back-button-container">
+            <button class="back-button" onclick="showPage('yearSelectionPage')">← Back to Years</button>
+        </div>
+    </div>
+
+    <!-- Courses Page -->
+    <div class="page-container hidden" id="coursesPage">
+        <h1 class="welcome-header"><span id="collegeName">College Name</span> Programs</h1>
+        <div class="program-grid" id="programGrid"></div>
+        <div class="back-button-container">
+            <button class="back-button" onclick="showPage('collegePage')">← Back to Colleges</button>
+        </div>
+    </div>
+
+    <!-- Students Page -->
+    <div class="page-container hidden" id="studentsPage">
+        <h1 class="welcome-header">Students of <span id="programName">Program Name</span></h1>
+        <input type="text" id="studentSearch" placeholder="Search students..." class="search-input">
+        <div class="student-grid" id="studentGrid"></div>
+        <div class="back-button-container">
+            <button class="back-button" onclick="showPage('coursesPage')">← Back to Programs</button>
+        </div>
+    </div>
+
+    <!-- Faculty Page -->
+    <div class="page-container hidden" id="facultyPage">
+        <h1 class="welcome-header" id="facultyCollegeTitle">Faculty Members</h1>
+        <div class="faculty-grid" id="facultyGrid"></div>
+        <div class="back-button-container">
+            <button class="back-button" onclick="showPage('dashboardPage')">← Back to Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Vision Page -->
+    <div class="page-container hidden" id="visionPage">
+        <h1 class="welcome-header">University Vision</h1>
+        <div class="content-section">
+            <p>Academically competitive, research and development focused, public service-driven, and economically sustainable state higher education institution.</p>
+        </div>
+        <div class="back-button-container">
+            <button class="back-button" onclick="showPage('dashboardPage')">← Back to Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Mission Page -->
+    <div class="page-container hidden" id="missionPage">
+        <h1 class="welcome-header">University Mission</h1>
+        <div class="content-section">
+            <p>To offer academic programs and services that will effectively transform individuals into productive citizens of the country and accelerate the development of high-level professionals who will provide leadership in meeting the demands of sustainable development and challenges of a diverse and globalized society.</p>
+        </div>
+        <div class="back-button-container">
+            <button class="back-button" onclick="showPage('dashboardPage')">← Back to Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Core Values Page -->
+    <div class="page-container hidden" id="coreValuesPage">
+        <h1 class="welcome-header">Core Values</h1>
+        <div class="content-section">
+            <p><strong>R</strong> - RELEVANCE</p>
+            <p><strong>I</strong> - INTEGRITY</p>
+            <p><strong>P</strong> - PRODUCTIVITY</p>
+            <p><strong>E</strong> - EXCELLENCE</p>
+        </div>
+        <div class="back-button-container">
+            <button class="back-button" onclick="showPage('dashboardPage')">← Back to Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Leadership Message Page -->
+    <div class="page-container hidden" id="leadershipMessagePage">
+        <h1 class="welcome-header">Leadership Message</h1>
+        <div class="content-section">
+            <p>"To the graduates of the University of Eastern Philippines, congratulations on your remarkable achievement! As you step into the next chapter of your lives, remember that you carry with you the values and knowledge instilled by this great institution. You are now equipped to face the challenges of the world and make meaningful contributions to society. We are immensely proud of your accomplishments and look forward to your future successes."</p>
+            <p style="text-align: right; margin-top: 20px; font-weight: bold;">- Dr. Rolando A. Delorino<br>University President</p>
+        </div>
+    </div>
+
+    <!-- UEP Hymn Page -->
+    <div class="page-container hidden" id="hymnPage">
+        <h1 class="welcome-header">UEP Hymn</h1>
+        <div class="content-section">
+            <div class="hymn-container">
+                <h3 class="hymn-title">UEP HYMN</h3>
+                <p>Let us sing to you, oh UEP</p>
+                <p>Sing the blue of your sea</p>
+                <p>The green of your mountains</p>
+                <p>Guiding us through days and nights</p>
+                <p>The harvest in your groves</p>
+                <br>
+                <p>Let us sing to you, dear UEP</p>
+                <p>Sing of your children fair</p>
+                <p>The knowledge you share</p>
+                <p>The values you instill</p>
+                <p>The service you render</p>
+                <br>
+                <p>Onward, forevermore, UEP</p>
+                <p>God’s grace be upon you</p>
+                <p>His mighty hands protect and guide you</p>
+                <p>As you face challenges</p>
+                <p>Turn them ‘to opportunities</p>
+                <p>And your founders’ dreams pursue</p>
+                <br>
+                <p>So we sing this hymn to you</p>
+                <p>Of praise and gratitude</p>
+                <p>Beloved Alma Mater</p>
+                <p>Keep your blue and gold soaring</p>
+                <p>Our fount of wisdom, joy and hope</p>
+                <p>Unsullied loyalty we do pledge</p>
+                <p>Unsullied loyalty we do pledge</p>
+                <br>
+                <p><i>Music by Rev. Fr. A Delizon</i></p>
+                <p><i>Lyrics by Dr. Lydia P.E. dela Rosa</i></p>
+            </div>
+        </div>
+        <div class="back-button-container">
+            <button class="back-button" onclick="showPage('dashboardPage')">← Back to Dashboard</button>
+        </div>
+    </div>
+
+</main>
+
+<footer class="footer">
+    © 2025 University of Eastern Philippines - All rights reserved
+</footer>
+
+<script th:src="@{/js/app.js}"></script>
+<script>
+    // Sidebar functionality
+    function toggleSidebar() {
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+
+        sidebar.classList.toggle('active');
+        mainContent.classList.toggle('sidebar-open');
+
+        // Close submenu when closing sidebar
+        if (!sidebar.classList.contains('active')) {
+            const submenu = document.getElementById('faculty-submenu');
+            if (submenu) {
+                submenu.classList.remove('active');
+            }
+        }
+    }
+
+    function toggleSubmenu(submenuId) {
+        event.preventDefault();
+        const submenu = document.getElementById(submenuId);
+        submenu.classList.toggle('active');
+
+        // Rotate chevron icon
+        const chevron = event.currentTarget.querySelector('.fa-chevron-down');
+        if (chevron) {
+            chevron.style.transform = submenu.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+    }
+
+    // Modify the existing showPage function to handle sidebar visibility
+    const originalShowPage = window.showPage || function(pageId) {
+        // Hide all pages
+        document.querySelectorAll('.page-container').forEach(page => {
+            page.classList.add('hidden');
+        });
+
+        // Show selected page
+        const pageToShow = document.getElementById(pageId);
+        if (pageToShow) {
+            pageToShow.classList.remove('hidden');
+        }
+
+        // Sidebar and hamburger handling
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+        const menuToggle = document.querySelector('.menu-toggle');
+
+        if (pageId === 'loginPage' || pageId === 'registerPage' || pageId === 'forgotPasswordPage') {
+            sidebar.classList.remove('active');
+            mainContent.classList.remove('sidebar-open');
+            if (menuToggle) menuToggle.style.display = 'none';
+        } else {
+            if (menuToggle) menuToggle.style.display = 'flex';
+            sidebar.classList.remove('active'); // Start closed after login
+            mainContent.classList.remove('sidebar-open');
+        }
+    };
+
+    // Override the existing showPage function
+    window.showPage = originalShowPage;
+
+    // Add showFaculty function to window object
+    window.showFaculty = function(college) {
+        document.getElementById('facultyCollegeTitle').textContent = `Faculty Members - ${college}`;
+        const facultyGrid = document.getElementById('facultyGrid');
+        facultyGrid.innerHTML = '';
+        academicPrograms[college].faculty.forEach(faculty => {
+            const card = document.createElement('div');
+            card.className = 'faculty-card';
+            card.innerHTML = `
+                <img src="${faculty.image}" class="faculty-image" alt="${faculty.name}">
+                <div class="faculty-name">${faculty.name}</div>
+                <div class="faculty-position">${faculty.position}</div>
+            `;
+            facultyGrid.appendChild(card);
+        });
+        showPage('facultyPage');
+    };
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const menuToggle = document.querySelector('.menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        // Hamburger visible
+        if (menuToggle) menuToggle.style.display = 'flex';
+        // Sidebar closed by default
+        if (sidebar) sidebar.classList.remove('active');
+    });
+</script>
+
+</body>
+</html>
